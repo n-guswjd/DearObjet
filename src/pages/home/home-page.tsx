@@ -11,15 +11,18 @@ import { useGetNoticesQuery } from '../../features/notice/api/notice-api';
 import { CATEGORY_LABEL } from '../../features/notice/constants/notice-constants';
 import { FestivalSection } from '../../features/festival/components/festival-section';
 import { useGetAllPostsQuery } from '../../features/post/api/post-api';
+import { DemoLoginModal } from '../../features/auth/components/demo-login-modal';
 
 import KakaoLogo from '../../assets/kakao-logo.svg';
 import CatImg from '../../assets/cat.png';
 
 const HOME_NOTICES_PER_PAGE = 5;
 const HOME_POSTS_LIMIT = 4;
+const IS_DEMO = import.meta.env.VITE_USE_MOCK === 'true';
 
 export const HomePage = () => {
   const [currentNoticePage, setCurrentNoticePage] = useState(1);
+  const [isDemoLoginOpen, setIsDemoLoginOpen] = useState(false);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
 
@@ -47,6 +50,11 @@ export const HomePage = () => {
   };
 
   const handleKakaoLogin = () => {
+    if (IS_DEMO) {
+      setIsDemoLoginOpen(true);
+      return;
+    }
+
     window.location.href = `${API_BASE_URL}/oauth2/authorization/kakao`;
   };
 
@@ -142,7 +150,7 @@ export const HomePage = () => {
                   className="flex w-[13.25rem] items-center justify-center gap-2 rounded-sm bg-[#FEE500] py-2 text-xs font-bold"
                   onClick={handleKakaoLogin}
                 >
-                  카카오로 시작하기
+                  {IS_DEMO ? '데모 계정으로 시작하기' : '카카오로 시작하기'}
                   <img src={KakaoLogo} alt="" aria-hidden="true" />
                 </button>
               </div>
@@ -196,6 +204,10 @@ export const HomePage = () => {
           </div>
         </section>
       </aside>
+
+      {isDemoLoginOpen && (
+        <DemoLoginModal onClose={() => setIsDemoLoginOpen(false)} />
+      )}
     </div>
   );
 };
