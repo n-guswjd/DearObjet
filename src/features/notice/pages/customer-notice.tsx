@@ -55,11 +55,11 @@ export const CustomerNotice = () => {
           onSelectNotice={handleSelectNotice}
         />
       ) : (
-        <section className="flex w-full flex-col gap-[3.0625rem]">
-          <div className="h-[63.25rem] w-full overflow-y-scroll rounded-xl border border-gray-300 px-[4.5rem] py-[4.25rem] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black [&::-webkit-scrollbar-track]:my-12 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-300 [&::-webkit-scrollbar]:w-1">
-            <div className="mb-[5rem] flex justify-between">
-              <h4 className="text-2xl font-medium">{selectedNotice.title}</h4>
-              <p className="text-2xl font-normal">{selectedNotice.date}</p>
+        <section className="flex w-full flex-col gap-[2rem]">
+          <div className="max-h-[63.25rem] min-h-[20rem] w-full overflow-y-auto rounded-xl border border-gray-300 px-[3rem] py-[2.5rem] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black [&::-webkit-scrollbar-track]:my-12 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-300 [&::-webkit-scrollbar]:w-1">
+            <div className="mb-[2rem] flex justify-between">
+              <h4 className="text-xl font-medium">{selectedNotice.title}</h4>
+              <p className="text-base font-normal">{selectedNotice.date}</p>
             </div>
             <div className="whitespace-pre-wrap text-gray-700">
               {selectedNotice.content}
