@@ -62,16 +62,20 @@ export const CommonNotice = ({
     <section className="flex h-[63.25rem] w-[42.0625rem] flex-col justify-between rounded-xl bg-white px-[3.125rem] pb-[1.6875rem] pt-10">
       <div className="flex flex-1 flex-col">
         <h3 className="hidden">공지사항 리스트</h3>
-        <div className="mb-[2.6875rem] flex gap-4">
+        <div className="mb-8 flex gap-2">
           {categories.map((category) => (
             <button
               key={category.label}
-              className="relative rounded-none bg-white text-sm font-medium text-gray-900 hover:border-white focus:outline-none"
+              className={`relative rounded-none bg-white px-4 py-2.5 text-base transition-colors hover:border-white hover:text-gray-900 focus:outline-none ${
+                selectedCategory === category.value
+                  ? 'font-bold text-gray-900'
+                  : 'font-medium text-gray-400'
+              }`}
               onClick={() => onCategoryChange(category.value)}
             >
               {category.label}
               {selectedCategory === category.value && (
-                <span className="absolute bottom-[-8px] left-1/2 h-[2px] w-[58px] -translate-x-1/2 bg-gray-900"></span>
+                <span className="absolute inset-x-0 bottom-0 h-[2px] bg-gray-900"></span>
               )}
             </button>
           ))}
