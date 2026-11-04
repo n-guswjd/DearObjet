@@ -77,7 +77,7 @@ export const postHandlers = [
     const userPosts = MOCK_POSTS.filter(
       (post) =>
         post.userId === userId &&
-        (post.isPublic || post.userId === viewer.userId)
+        (post.isPublic || post.userId === viewer?.userId)
     );
     const result = paginate(userPosts, page, POSTS_PER_PAGE);
 
@@ -89,6 +89,12 @@ export const postHandlers = [
   http.post('*/api/v1/posts', async ({ request }) => {
     const { content, imageUrls } = await readPostForm(request);
     const user = getMockUser();
+    if (!user) {
+      return HttpResponse.json(
+        { message: '로그인이 필요합니다.' },
+        { status: 401 }
+      );
+    }
 
     const post: PostDetail = {
       postId: nextPostId++,
