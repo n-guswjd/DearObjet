@@ -2,6 +2,8 @@ import type { PostDetail } from '../../features/post/types/post-type';
 
 import { createPlaceholderImage } from '../utils/placeholder-image';
 
+import { MOCK_ARTISTS } from './mock-artists';
+
 const AUTHORS = [
   { userId: 1, userName: '데모 소품샵' },
   { userId: 2, userName: '데모 작가' },
@@ -48,3 +50,27 @@ export const MOCK_POSTS: PostDetail[] = Array.from(
     };
   }
 );
+
+const ARTIST_POSTS_PER_PERSON = 2;
+const existingAuthorIds = new Set(MOCK_POSTS.map((post) => post.userId));
+
+const artistPosts: PostDetail[] = MOCK_ARTISTS.filter(
+  (artist) => !existingAuthorIds.has(artist.userId)
+).flatMap((artist, artistIndex) =>
+  Array.from({ length: ARTIST_POSTS_PER_PERSON }, (_, index) => ({
+    postId: 1000 + artistIndex * ARTIST_POSTS_PER_PERSON + index,
+    userId: artist.userId,
+    userName: artist.artistName,
+    profileUrl: null,
+    content: CONTENTS[(artistIndex + index) % CONTENTS.length],
+    imageUrls: [
+      createPlaceholderImage(artist.userId * 7 + index, artist.artistName),
+    ],
+    isPublic: true,
+    createdAt: new Date(Date.UTC(2026, 8, 28 - artistIndex, 10 + index, 0, 0))
+      .toISOString()
+      .slice(0, 19),
+  }))
+);
+
+MOCK_POSTS.push(...artistPosts);

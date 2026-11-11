@@ -1,3 +1,4 @@
+import { MOCK_ARTISTS } from './mock-artists';
 import { USER_ROLE } from '../../shared/constants';
 import type { UserRole } from '../../shared/constants';
 import type { MessageResponse } from '../../features/chat/types/chat-types';
@@ -66,10 +67,25 @@ const PEOPLE_SEEDS: Omit<ChatPerson, 'profileImageUrl'>[] = [
   },
 ];
 
-export const CHAT_PEOPLE: ChatPerson[] = PEOPLE_SEEDS.map((seed) => ({
+const BASE_PEOPLE: ChatPerson[] = PEOPLE_SEEDS.map((seed) => ({
   ...seed,
   profileImageUrl: createPlaceholderImage(seed.userId, seed.name),
 }));
+
+const ARTIST_PEOPLE: ChatPerson[] = MOCK_ARTISTS.filter(
+  (artist) => !BASE_PEOPLE.some((person) => person.userId === artist.userId)
+).map((artist) => ({
+  userId: artist.userId,
+  name: artist.artistName,
+  role: USER_ROLE.ARTIST,
+  specialty: '공예',
+  statusLabel: '입점 가능',
+  profileImageUrl:
+    artist.artistImageUrl ??
+    createPlaceholderImage(artist.userId, artist.artistName),
+}));
+
+export const CHAT_PEOPLE: ChatPerson[] = [...BASE_PEOPLE, ...ARTIST_PEOPLE];
 
 export const getPerson = (userId: number) =>
   CHAT_PEOPLE.find((person) => person.userId === userId) ?? CHAT_PEOPLE[0];
