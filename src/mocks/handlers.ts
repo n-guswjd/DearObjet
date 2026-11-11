@@ -2,6 +2,7 @@ import type { RequestHandler } from 'msw';
 
 import { artistPageHandlers } from './features/artist-page-handlers';
 import { authHandlers } from './features/auth-handlers';
+import { businessProfileHandlers } from './features/business-profile-handlers';
 import { chatHandlers } from './features/chat-handlers';
 import { favoriteHandlers } from './features/favorite-handlers';
 import { mapHandlers } from './features/map-handlers';
@@ -12,6 +13,7 @@ import { postHandlers } from './features/post-handlers';
 export const handlers: RequestHandler[] = [
   ...authHandlers,
   ...myPageHandlers,
+  ...businessProfileHandlers,
   ...favoriteHandlers,
   ...mapHandlers,
   ...artistPageHandlers,
