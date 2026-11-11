@@ -19,6 +19,8 @@ import type {
   ChatWebSocketHook,
 } from '../types/chat-types';
 
+const IS_DEMO = import.meta.env.VITE_USE_MOCK === 'true';
+
 export const useChatWebSocket = (): ChatWebSocketHook => {
   const dispatch = useAppDispatch();
 
@@ -85,17 +87,73 @@ export const useChatWebSocket = (): ChatWebSocketHook => {
 
   // ===== STOMP 메시지 전송 =====
 
-  const sendMessage = useCallback((roomId: string, content: string) => {
-    if (!clientRef.current?.connected) {
-      console.error('WebSocket not connected');
-      return;
-    }
-    clientRef.current.publish({
-      destination: `/app/chat/${roomId}/send`,
-      headers: { 'content-type': 'application/json;charset=UTF-8' },
-      body: JSON.stringify({ roomId, content, messageType: 'TEXT' }),
-    });
-  }, []);
+  // const sendMessage = useCallback((roomId: string, content: string) => {
+  //   if (!clientRef.current?.connected) {
+  //     console.error('WebSocket not connected');
+  //     return;
+  //   }
+  //   clientRef.current.publish({
+  //     destination: `/app/chat/${roomId}/send`,
+  //     headers: { 'content-type': 'application/json;charset=UTF-8' },
+  //     body: JSON.stringify({ roomId, content, messageType: 'TEXT' }),
+  //   });
+  // }, []);
+  const sendDemoMessage = useCallback(
+    async (roomId: string, content: string) => {
+      if (!currentUser) return;
+
+      try {
+        const response = await fetch(`/api/chat/rooms/${roomId}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content }),
+        });
+        const { data } = (await response.json()) as {
+          data: { message: MessageResponse; reply: MessageResponse };
+        };
+
+        dispatch(
+          addMessage({
+            message: data.message,
+            currentUserId: currentUser.userId,
+            skipUnreadUpdate: true,
+          })
+        );
+
+        window.setTimeout(() => {
+          dispatch(
+            addMessage({
+              message: data.reply,
+              currentUserId: currentUser.userId,
+              skipUnreadUpdate: true,
+            })
+          );
+        }, 1000);
+      } catch (e) {
+        console.error('데모 메시지 전송 실패:', e);
+      }
+    },
+    [currentUser, dispatch]
+  );
+
+  const sendMessage = useCallback(
+    (roomId: string, content: string) => {
+      if (IS_DEMO) {
+        sendDemoMessage(roomId, content);
+        return;
+      }
+      if (!clientRef.current?.connected) {
+        console.error('WebSocket not connected');
+        return;
+      }
+      clientRef.current.publish({
+        destination: `/app/chat/${roomId}/send`,
+        headers: { 'content-type': 'application/json;charset=UTF-8' },
+        body: JSON.stringify({ roomId, content, messageType: 'TEXT' }),
+      });
+    },
+    [sendDemoMessage]
+  );
 
   // 타이핑 상태 전송 — 상대방에게 "..." 표시를 위해 사용
   const sendTyping = useCallback(
@@ -236,6 +294,11 @@ export const useChatWebSocket = (): ChatWebSocketHook => {
   useEffect(() => {
     if (!currentUser || !accessToken) {
       setIsConnected(false);
+      return;
+    }
+
+    if (IS_DEMO) {
+      setIsConnected(true);
       return;
     }
 
