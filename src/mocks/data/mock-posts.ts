@@ -8,6 +8,7 @@ const AUTHORS = [
   { userId: 3, userName: '봄날 공방' },
   { userId: 4, userName: '모이 소품샵' },
   { userId: 5, userName: '달빛 작가' },
+  { userId: 10, userName: '데모 회원' },
 ];
 
 const CONTENTS = [
