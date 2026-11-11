@@ -1,5 +1,6 @@
 import type { RequestHandler } from 'msw';
 
+import { artistPageHandlers } from './features/artist-page-handlers';
 import { authHandlers } from './features/auth-handlers';
 import { chatHandlers } from './features/chat-handlers';
 import { favoriteHandlers } from './features/favorite-handlers';
@@ -13,6 +14,7 @@ export const handlers: RequestHandler[] = [
   ...myPageHandlers,
   ...favoriteHandlers,
   ...mapHandlers,
+  ...artistPageHandlers,
   ...chatHandlers,
   ...noticeHandlers,
   ...postHandlers,
