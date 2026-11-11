@@ -23,7 +23,7 @@ interface UpdateProfileBody {
 
 const profileStates = new Map<number, ProfileState>();
 
-const getProfileState = (userId: number) => {
+export const getProfileState = (userId: number) => {
   const existing = profileStates.get(userId);
 
   if (existing) {
@@ -44,7 +44,7 @@ const buildProfile = (user: AuthUser) => {
   const state = getProfileState(user.userId);
 
   return {
-    name: user.name,
+    name: user.name.replace(/\s/g, ''),
     phoneNumber: user.phoneNumber ?? '',
     email: user.email,
     profileUrl: state.profileUrl,
@@ -86,7 +86,7 @@ export const myPageHandlers = [
     const image = formData.get('profileImage');
     const state = getProfileState(user.userId);
 
-    if (body.name) {
+    if (body.name && body.name !== user.name.replace(/\s/g, '')) {
       user.name = body.name;
     }
 
