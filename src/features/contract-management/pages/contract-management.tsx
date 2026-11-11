@@ -9,6 +9,7 @@ import {
   useSendContractMutation,
   useArtistSubmissionMutation,
   useGetInProgressContractsQuery,
+  useGetCompletedContractsQuery,
   useGetContractDetailQuery,
 } from '../api/contract-management-api';
 import type { ArtistSearchItem } from '../types/contract-management-types';
@@ -115,6 +116,9 @@ export const ContractManagement = () => {
 
   const { data: businessProfile } = useGetBusinessProfileQuery();
   const { data: inProgressData } = useGetInProgressContractsQuery(userId!, {
+    skip: !userId,
+  });
+  const { data: completedData } = useGetCompletedContractsQuery(userId!, {
     skip: !userId,
   });
   const { data: contractDetail } = useGetContractDetailQuery(
@@ -625,7 +629,18 @@ export const ContractManagement = () => {
             <h3>완료된 계약</h3>
             <Button variant="secondaryDark" size="small" label="삭제" />
           </div>
-          <div className="overflow-y-auto" />
+          <div className="overflow-y-auto">
+            {completedData?.items.map((item) => (
+              <div
+                key={item.contractId}
+                className="grid w-full grid-cols-3 border-b border-gray-100 px-4 py-3 text-left text-sm"
+              >
+                <span className="truncate">{item.title}</span>
+                <span className="text-gray-500">{item.contractDate}</span>
+                <span className="text-gray-500">{item.artistName}</span>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
     </div>
