@@ -39,8 +39,10 @@
 ---
 
 ## 🛠 기술 스택
-- **Frontend**: `React 19`, `TypeScript`, `Redux Toolkit`, `Tailwind CSS`, `React Kakao Maps SDK`, `React Calendar`, `Lucide Icons`
-- **Tooling**: `Storybook`, `ESLint`, `Prettier`
+- **Frontend**: `React 19`, `TypeScript`, `Vite`, `Redux Toolkit`, `React Router v7`, `Tailwind CSS v3`, `React Kakao Maps SDK`, `React Calendar`, `Lucide Icons`
+- **실시간 통신**: `STOMP`, `SockJS` (채팅)
+- **문서 출력**: `jsPDF`, `html2canvas` (PDF 다운로드)
+- **Tooling**: `Storybook v9`, `Vitest`, `Playwright`, `ESLint`, `Prettier`, `Husky`, `lint-staged`
 - **Mocking**: `MSW (Mock Service Worker)`
 - **Backend (팀 담당)**: `Spring Boot`, `PostgreSQL`
 - **Deployment**: `GitHub Pages` (예정)
